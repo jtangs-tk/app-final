@@ -19,16 +19,16 @@ class PostsController < ApplicationController
 
   def create
     the_post = Post.new
-    the_post.user_id = params.fetch("query_user_id")
-    the_post.pitch_id = params.fetch("query_pitch_id")
     the_post.title = params.fetch("query_title")
     the_post.body = params.fetch("query_body")
+    the_post.pitch_id = params.fetch("query_pitch_id")
+    the_post.user_id = params.fetch("user_post_id")
 
     if the_post.valid?
       the_post.save
-      redirect_to("/posts", { :notice => "Post created successfully." })
+      redirect_to("/pitches/#{the_post.pitch_id}", { :notice => "Post created successfully." })
     else
-      redirect_to("/posts", { :alert => the_post.errors.full_messages.to_sentence })
+      redirect_to("/pitches/#{the_post.pitch_id}", { :alert => the_post.errors.full_messages.to_sentence })
     end
   end
 

@@ -1,66 +1,55 @@
 <div>
   <div>
     <h1>
-      Pitch #<%= @the_pitch.id %> details
+      <%= @the_pitch.name %>
     </h1>
 
-    <div>
-      <div>
-        <a href="/pitches">
-          Go back
-        </a>
-      </div>
-
-      <div>
-        <a href="/delete_pitch/<%= @the_pitch.id %>">
-          Delete pitch
-        </a>
-      </div>
-    </div>
+    <% if current_user != nil %>
+      <% if current_user.id == @the_pitch.user_id %>
+        <div>
+          <a href="/delete_pitch/<%= @the_pitch.id %>">
+            Delete pitch
+          </a>
+        </div>
+      <% end %>
+    <% end %>
 
     <dl>
       <dt>
-        Address
+        <b>Address</b>
       </dt>
       <dd>
         <%= @the_pitch.address %>
       </dd>
 
       <dt>
-        Name
+        <b>Name</b>
       </dt>
       <dd>
         <%= @the_pitch.name %>
       </dd>
 
       <dt>
-        User Email
+        <b>Image</b>
       </dt>
+
       <dd>
-
-        <% matching_users = User.where({ :id => @the_pitch.user_id }) %>
-
-        <%= matching_users.at(0).email %>
-
-      </dd>
-
-      <dt>
-        Image
-      </dt>
-      
-      <dd>
-        <%= @the_pitch.image %>
+        <% if @the_pitch.image.present? %>
+          <img src="<%= @the_pitch.image %>" style="max-width: 300px; max-height: 300px;">
+        <% else %>
+          No Image
+        <% end %>
       </dd>
       
       <dt>
-        Created at
+        <b>Created at</b>
       </dt>
       <dd>
         <%= time_ago_in_words(@the_pitch.created_at) %> ago
       </dd>
 
       <dt>
-        Updated at
+        <b>Updated at</b>
       </dt>
       <dd>
         <%= time_ago_in_words(@the_pitch.updated_at) %> ago
@@ -71,87 +60,93 @@
 
 <hr>
 
-<% if current_user.id == @the_pitch.user_id%>
-  <div>
+<% if current_user != nil %>
+  <% if current_user.id == @the_pitch.user_id%>
     <div>
-      <h2>
-        Edit pitch
-      </h2>
+      <div>
+        <h2>
+          Edit pitch
+        </h2>
 
-      <form action="/modify_pitch/<%= @the_pitch.id %>"  method="post" >
-        <div>
-          <label for="address_box">
-            Address
-          </label>
+        <form action="/modify_pitch/<%= @the_pitch.id %>"  method="post" >
+          <div>
+            <label for="address_box">
+              Address
+            </label>
 
-          <input type="text" id="address_box" name="query_address" value="<%= @the_pitch.address %>">
-        </div>
+            <input type="text" id="address_box" name="query_address" value="<%= @the_pitch.address %>">
+          </div>
 
-        <div>
-          <label for="name_box">
-            Name
-          </label>
+          <div>
+            <label for="name_box">
+              Name
+            </label>
 
-          <input type="text" id="name_box" name="query_name" value="<%= @the_pitch.name %>">
-        </div>
+            <input type="text" id="name_box" name="query_name" value="<%= @the_pitch.name %>">
+          </div>
 
-        <div>
-          <label for="user_id_box">
-            User
-          </label>
+          <div>
+            <label for="user_id_box">
+              User
+            </label>
 
-          <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_pitch.user_id %>">
-        </div>
+            <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_pitch.user_id %>">
+          </div>
 
-        <div>
-          <label for="image_box">
-            Image
-          </label>
+          <div>
+            <label for="image_box">
+              Image
+            </label>
 
-          <input type="text" id="image_box" name="query_image" value="<%= @the_pitch.image %>">
-        </div>
+            <input type="text" id="image_box" name="query_image" value="<%= @the_pitch.image %>">
+          </div>
 
-        <button>
-          Update pitch
-        </button>
-      </form>
+          <button>
+            Update pitch
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
+  <% end %>
+<% end %>
+
+<% if current_user == nil %>
+  <a href="/users/sign_in">Sign in to post</a>
+<% else %>
+  <h2>
+    Make a new post
+  </h2>
+
+  <form action="/insert_post" method="post">
+    <div>
+      <label for="title_box">
+        Title
+      </label>
+
+      <input type="text" id="title_box" name="query_title">
+    </div>
+
+    <div>
+      <label for="body_box">
+        Body
+      </label>
+
+      <textarea id="body_box" name="query_body" rows="3"></textarea>
+    </div>
+
+    <input type="hidden" id="pitch_id_box" name="query_pitch_id" value="<%= @the_pitch.id %>">
+
+    <input type="hidden" id="user_id_box" name="user_post_id" value="<%= current_user.id %>">
+
+    <button>
+      Add post
+    </button>
+  </form>
 <% end %>
 
 <hr>
 
-<h2>
-  Add a new post
-</h2>
-
-<form action="/insert_post" method="post">
-  <div>
-    <label for="title_box">
-      Title
-    </label>
-
-    <input type="text" id="title_box" name="query_title">
-  </div>
-
-  <div>
-    <label for="body_box">
-      Body
-    </label>
-
-    <textarea id="body_box" name="query_body" rows="3"></textarea>
-  </div>
-
-  <input type="hidden" id="board_id_box" name="query_board_id" value="<%= @the_pitch.id %>">
-
-  <button>
-    Add post
-  </button>
-</form>
-
-<hr>
-
-<h2>Active posts</h2>
+<h2>Posts and Upcoming Games</h2>
 
 <table border="1">
   <tr>

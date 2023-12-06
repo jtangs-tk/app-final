@@ -1,8 +1,8 @@
 <div>
   <div>
-    <h1>
-      List of all pitches
-    </h1>
+    <h2>
+      Pitches
+    </h2>
   </div>
 </div>
 
@@ -92,7 +92,11 @@
         </td>
 
         <td>
-          <%= a_pitch.image %>
+          <% if a_pitch.image.present? %>
+            <img src="<%= a_pitch.image %>" style="max-width: 300px; max-height: 300px;">
+          <% else %>
+            <p>No Image<p>
+          <% end %>
         </td>
 
         <td>
@@ -114,3 +118,7 @@
 </div>
 
 <hr>
+  <h2>About us</h2>
+  <div>
+    We believe in connecting football/soccer players to the beautiful game they love. Everyone deserves a pitch to play on.
+  </div>

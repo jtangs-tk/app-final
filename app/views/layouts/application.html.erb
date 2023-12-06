@@ -1,5 +1,23 @@
 <!DOCTYPE html>
 <html>
+
+<style>
+  nav {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  nav h1 {
+    margin: 0; /* Remove default margin from h1 */
+  }
+
+  nav h3 {
+    text-align: right;
+    margin: 0; /* Remove default margin from h3 */
+  }
+</style>
+
+
   <head>
     <title>Rails Template</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,13 +30,13 @@
 
   <body>
     <nav>
-      <ul><a href="/">Pitch</a></ul>
+    <h1><a href="/">Pitch</a></h1>
     <% if current_user.present? %>
-      <ul><a href="/users/edit">Edit profile</a></ul>
-      <ul><a href="/users/sign_out">Sign out</a></ul>
+      <h3><a href="/users/edit">Edit profile</a></h3>
+      <h3><a href="/users/sign_out">Sign out</a></h3>
     <% else %>
-      <ul><a href="/users/sign_in">Sign in</a></ul>
-      <ul><a href="/users/sign_up">Sign up</a></ul>
+      <h3><a href="/users/sign_in">Sign in</a></h3>
+      <h3><a href="/users/sign_up">Sign up</a></h3>
     <% end %>
     </nav>
 
@@ -26,6 +44,7 @@
 
     <%= yield %>
   </body>
+
 </html>
 
 <p class="notice"><%= notice %></p>
